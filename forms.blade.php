@@ -484,9 +484,11 @@ class MyCustomForm extends \VlForm
     public $id = 'my-form-id';
     public $class = 'p-4 bg-gray-100'; 
     public $style = 'max-width:85vw;height:100px'; 
+    public $noMargins = false; //By default, form elements have vertical margins.
 
     protected $submitRoute = null; //Ex: 'subscription'. Use if the route is simple (no parameters)
     protected $submitMethod = 'POST'; //Accepts 'GET', 'PUT', etc...
+    protected $failedAuthorizationMessage = 'You are not allowed to submit this form'; //If you wish to override the default message.
     protected $redirectTo = null; //Ex: 'home'. Will redirect home.
     protected $redirectMessage = 'Success! Redirecting...'; //Will display a redirect message.
 
@@ -713,8 +715,21 @@ Input::form('Name')->submitsOnInput(400)</code></pre>
   Regarding the security of the display phase (i.e. who can view the Form), that should be handled by your middlewares in your routes or controllers.
 </p>
 
-@tip(By default, when a Form has no `authorize()` method, the security of the display phase ill be applied, meaning: if a user can see a certain Form, he will be able to submit it.)
+@tip(By default, when a Form has no `authorize()` method, the security of the display phase will be applied, meaning: if a user can see a certain Form, he will be able to submit it.)
 
+<h4>Failed authorization message</h4>
+
+<p>By default, if the authorization fails - i.e. returns `false` - Laravel throws an `Illuminate\Auth\Access\AuthorizationException` with a default message of 'This action is unauthorized'. If you wish to override this behavior, you may assign a value to the `$failedAuthorizationMessage` property in your Form:</p>
+
+<pre><code class="language-php">protected $failedAuthorizationMessage = 'A custom 403 message';</code></pre>
+
+<p>Or if you want more control, you may add a `failedAuthorization` method to your Form:</p>
+
+<pre><code class="language-php">public function failedAuthorization()
+{
+   throw new AuthorizationException('A custom 403 message');
+}
+</code></pre>
 
 <!-- ------------------------------------------------------------- -->
 <h3>Validation</h3>

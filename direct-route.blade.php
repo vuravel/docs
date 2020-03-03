@@ -3,6 +3,8 @@
 </p> 
 
 <pre><code class="language-php">//routes/web.php
+use App\Forms\AnswerForm;
+use Vuravel\Library\ChangePasswordForm;
 
 //To load components in our vuravel Blade template 'my-template.blade.php':	
 Route::group(['extends' => 'my-template'], function(){
